@@ -1,0 +1,4 @@
+env/
+__pycache__/
+main_test.py
+.env.yaml
