@@ -202,7 +202,7 @@ def sync_content(host_url, host_name, client_id, client_secret, is_demo):
                         sdk.sync_lookml_dashboard(lookml_dash_id,looker_sdk.models.WriteDashboard())
                     except:
                         print('Problem syncing  %s  dashboard, ID: %s' %(title, new_dash.id))
-                        failed + =1
+                        failed += 1
             else:
                 print('Dashboard %s does not yet exist, creating it in space %s' %(title, str(space_id)))
                 new_dash = sdk.import_lookml_dashboard(lookml_dash_id,str(space_id),{})
@@ -284,6 +284,7 @@ def main(request):
     hosts_short = [h.split('//')[1].split('.')[0] for h in host_urls]
     dashboards_dict, dashboards_board_dict, spaces, repo_name, models_ = get_metadata(hosts_short)
     dashboard_ids = dashboards_dict.keys()
+    failed = -1
     if is_demo:
         for host_url, host_name in zip(host_urls,hosts_short):
             #check if we should import into this host
@@ -298,6 +299,9 @@ def main(request):
     
     if failed > 0:
         raise RuntimeError('Something went wrong syncing dashboards')
+    
+    else:
+        json.dumps({'message': 'Dashboards have been updated'}), 200
     
 
 
